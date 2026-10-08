@@ -1,0 +1,1194 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>بازی رمز و راز جدول شگفت‌انگیز</title>
+
+    <style>
+        /* لود فونت‌های اختصاصی با CDN */
+        @font-face {
+            font-family: 'BKoodak';
+            src: url('https://cdn.jsdelivr.net/gh/rokhafrooz1960-debug/my_fonts/B%20Koodak%20Bold_0.ttf') format('truetype');
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Faraz';
+            src: url('https://cdn.jsdelivr.net/gh/rokhafrooz1960-debug/my_fonts/Mj_Faraz_0.TTF') format('truetype');
+            font-display: swap;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'BKoodak', Tahoma, sans-serif;
+            overflow: hidden;
+            background-color: #0b1d0c;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: opacity 0.5s ease;
+        }
+
+        /* ------------------ صفحه ۱: ورود ------------------ */
+        #screen-intro {
+            background-image: url('https://s25.uupload.ir/files/arabzade/PasB.jpg');
+            z-index: 20;
+            justify-content: flex-start;
+        }
+
+        /* انتقال به پایین‌تر طبق درخواست */
+        .text-top {
+            margin-top: 8.5vh;
+            color: #006400;
+            font-size: 3.2vh;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 235, 59, 0.9), 0 0 15px rgba(255, 235, 59, 0.7);
+            z-index: 10;
+        }
+
+        .yardone-icon {
+            margin-top: 14px;
+            width: 95px;
+            z-index: 10;
+        }
+
+        /* همه موارد (به جز الهی به امید تو) بیاد پایین‌تر که داخل کادر قرار بگیره */
+        .text-title {
+            color: #006400;
+            font-size: 4.2vh;
+            font-weight: bold;
+            margin-top: 22vh; /* تغییر: پایین‌تر */
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 255, 0, 0.5), 0 0 20px #006400, 0 0 30px #006400;
+            z-index: 10;
+        }
+
+        .input-wrapper {
+            position: relative;
+            margin-top: 18px; /* کمی متعادل برای نشستن داخل کادر */
+            width: 250px;
+            height: 52px;
+            border-radius: 26px;
+            z-index: 10;
+            box-shadow: 0 0 12px rgba(144, 238, 144, 0.8), inset 0 0 15px rgba(0, 100, 0, 0.4);
+            background-color: rgba(255, 255, 255, 0.82); 
+        }
+
+        .input-border-anim {
+            position: absolute;
+            inset: 0;
+            border-radius: 26px;
+            padding: 3px;
+            background: #90EE90;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out;
+            mask-composite: exclude;
+            overflow: hidden;
+        }
+
+        .input-border-anim::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(#90EE90 40%, #006400 100%);
+            animation: rotate-led 2s linear infinite;
+        }
+
+        @keyframes rotate-led {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .name-input {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            border: none;
+            border-radius: 26px;
+            text-align: center;
+            font-family: 'BKoodak', Tahoma, sans-serif;
+            font-size: 3.2vh; 
+            font-weight: bold;
+            background-color: transparent;
+            color: #004d00;
+            outline: none;
+            z-index: 2;
+        }
+        
+        .name-input::placeholder {
+            color: #1b5e20;
+            font-size: 2.6vh;
+            font-weight: normal;
+            opacity: 0.85;
+        }
+
+        .ready-text {
+            color: #006400;
+            font-size: 2.8vh;
+            font-weight: bold;
+            margin-top: 14px; /* کمی متعادل */
+            min-height: 35px;
+            visibility: hidden;
+            z-index: 10;
+        }
+
+        .start-btn {
+            margin-top: 10px; /* کمی متعادل */
+            width: 110px;
+            cursor: pointer;
+            z-index: 10;
+            animation: pulseBarg 1.5s infinite ease-in-out;
+        }
+        
+        .start-btn:hover {
+            animation-play-state: paused;
+            transform: scale(1.12);
+            filter: drop-shadow(0 15px 20px rgba(0, 0, 0, 0.6)) brightness(1.1);
+        }
+
+        @keyframes pulseBarg {
+            0% { transform: scale(1); filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3)); }
+            50% { transform: scale(1.12); filter: drop-shadow(0 15px 20px rgba(0, 0, 0, 0.6)); }
+            100% { transform: scale(1); filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3)); }
+        }
+
+        /* انتقال نام طراح کمی بالاتر با حفظ فونت فراز */
+        .designer-credit {
+            position: absolute;
+            bottom: 34px;
+            font-family: 'Faraz', Tahoma, sans-serif;
+            font-size: 27px;
+            color: #0e3d10;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.95), 1px 1px 2px rgba(255, 255, 255, 0.8);
+            z-index: 10;
+            letter-spacing: 0.5px;
+        }
+
+        .firefly {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background-color: #d4ff00;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #d4ff00, 0 0 15px #d4ff00;
+            pointer-events: none;
+            z-index: 5;
+            animation: floatBlink ease-in-out infinite alternate;
+        }
+
+        @keyframes floatBlink {
+            0% { transform: translateY(0) translateX(0); opacity: 0.2; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-20px) translateX(10px); opacity: 0.2; }
+        }
+
+        /* ------------------ صفحه ۲: بازی ------------------ */
+        #screen-game {
+            background-color: #1a2a1b;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            justify-content: center;
+        }
+
+        #game-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 480px;
+            aspect-ratio: 1080 / 1920;
+            background: url('https://s21.uupload.ir/files/arabzade/Sdo.jpg') no-repeat center center;
+            background-size: 100% 100%;
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(0,0,0,0.7);
+        }
+
+        #level-container {
+            position: absolute;
+            top: 0.6%; left: 34.8%; width: 41%; height: 5%;
+            display: flex; justify-content: center; align-items: center;
+            color: #fff; font-size: clamp(16px, 4.2vw, 22px); font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+
+        #palette-container {
+            position: absolute;
+            top: 27.8%; left: 13.5%; width: 78.6%; height: 12%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .palette-slot {
+            width: 30%; height: 95%;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        #board-container {
+            position: absolute;
+            top: 40.6%; left: 7.4%; width: 89.6%; height: 52.7%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 10px;
+            padding: 14px;
+            border-radius: 26px;
+            border: 5px solid #ffcc00;
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(2px);
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.7), 
+                        inset 0 0 16px rgba(255, 255, 255, 0.6), 
+                        0 12px 24px rgba(0, 0, 0, 0.35);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .board-intro-anim {
+            animation: boardPop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), boardGlow 1.2s infinite alternate;
+        }
+
+        @keyframes boardPop {
+            0% { transform: scale(0.75); opacity: 0.5; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes boardGlow {
+            0% { box-shadow: 0 0 15px #ffcc00, inset 0 0 10px #ffffff; }
+            100% { box-shadow: 0 0 35px #00e676, inset 0 0 20px #76ff03; }
+        }
+
+        .cell {
+            background: rgba(255, 255, 255, 0.45);
+            border-radius: 18px;
+            display: flex; justify-content: center; align-items: center;
+            transition: all 0.25s ease;
+            position: relative;
+            border: 3px solid rgba(255, 255, 255, 0.85);
+            box-shadow: inset 2px 3px 6px rgba(255, 255, 255, 0.8),
+                        inset -2px -3px 6px rgba(0, 0, 0, 0.12),
+                        0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .cell.empty {
+            border: 3px dashed #ff9100;
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: inset 0 0 10px rgba(255, 145, 0, 0.25);
+        }
+
+        #lives-container {
+            position: absolute;
+            top: 94.2%; left: 27.5%; width: 45%; height: 4.8%;
+            display: flex; justify-content: center; align-items: center;
+            gap: 6px; font-size: clamp(18px, 5vw, 28px);
+        }
+
+        .heart {
+            transition: transform 0.3s, opacity 0.3s;
+        }
+        .heart.lost {
+            opacity: 0.18; transform: scale(0.5); filter: grayscale(100%);
+        }
+
+        .item {
+            width: 80%; height: 80%;
+            pointer-events: none;
+            position: relative;
+            will-change: transform;
+        }
+        .draggable {
+            pointer-events: auto;
+            cursor: grab;
+            touch-action: none;
+        }
+        .draggable:active { cursor: grabbing; }
+
+        .blob-1 { background: radial-gradient(circle at 30% 30%, #ff7eb3, #ff4081); border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; box-shadow: 2px 4px 8px rgba(255, 64, 129, 0.5); }
+        .blob-2 { background: radial-gradient(circle at 30% 30%, #81c784, #4caf50); border-radius: 60% 40% 50% 50% / 50% 60% 40% 50%; box-shadow: 2px 4px 8px rgba(76, 175, 80, 0.5); }
+        .blob-3 { background: radial-gradient(circle at 30% 30%, #64b5f6, #2196f3); border-radius: 50% 50% 40% 60% / 60% 40% 50% 50%; box-shadow: 2px 4px 8px rgba(33, 150, 243, 0.5); }
+        .shape-1 { background: linear-gradient(135deg, #ff5252, #d32f2f); clip-path: polygon(50% 0%, 0% 100%, 100% 100%); filter: drop-shadow(0px 4px 3px rgba(211, 47, 47, 0.5)); border-radius: 5px; }
+        .shape-2 { background: radial-gradient(circle at 30% 30%, #69f0ae, #00e676); border-radius: 50%; box-shadow: 0 5px 10px rgba(0, 230, 118, 0.5); }
+        .shape-3 { background: linear-gradient(135deg, #40c4ff, #00b0ff); border-radius: 15px; box-shadow: 0 5px 10px rgba(0, 176, 255, 0.5); }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-8px) rotate(-4deg); }
+            50% { transform: translateX(8px) rotate(4deg); }
+            75% { transform: translateX(-8px) rotate(-4deg); }
+            100% { transform: translateX(0); }
+        }
+        @keyframes blink-green {
+            0%, 100% { background-color: rgba(76, 175, 80, 0.7); box-shadow: 0 0 25px #4caf50; }
+            50% { background-color: rgba(76, 175, 80, 0.2); box-shadow: 0 0 8px #4caf50; }
+        }
+        @keyframes blink-red {
+            0%, 100% { background-color: rgba(244, 67, 54, 0.7); box-shadow: 0 0 25px #f44336; }
+            50% { background-color: rgba(244, 67, 54, 0.2); box-shadow: 0 0 8px #f44336; }
+        }
+
+        .shake { animation: shake 0.4s; }
+        .blink-green { animation: blink-green 0.8s 2; border-color: #4caf50 !important; }
+        .blink-red { animation: blink-red 0.8s 2; border-color: #f44336 !important; }
+
+        .star-particle {
+            position: absolute;
+            font-size: 24px;
+            pointer-events: none;
+            z-index: 50;
+            animation: fly-out 0.8s ease-out forwards;
+        }
+        @keyframes fly-out {
+            0% { transform: translate(0, 0) scale(0.5); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(1.6) rotate(180deg); opacity: 0; }
+        }
+
+        /* شبح کشیدن و رها کردن روان */
+        #drag-ghost {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            width: 70px;
+            height: 70px;
+            display: none;
+            transform: translate3d(-500px, -500px, 0) scale(1.18);
+            filter: drop-shadow(0 12px 18px rgba(0,0,0,0.45));
+            will-change: transform;
+            transition: transform 0.04s linear;
+        }
+
+        .confetti {
+            position: absolute; width: 10px; height: 10px; z-index: 10000; pointer-events: none;
+        }
+
+        /* لایه پیام تشویقی و نور نئونی LED */
+        #praise-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: none; justify-content: center; align-items: center;
+            z-index: 2000; flex-direction: column; text-align: center;
+            background: rgba(0,0,0,0.42);
+            backdrop-filter: blur(3px);
+        }
+
+        .praise-text {
+            font-family: 'BKoodak', Tahoma, sans-serif;
+            font-size: clamp(30px, 8vw, 44px);
+            font-weight: bold;
+            color: #ffffff;
+            padding: 15px 25px;
+            text-align: center;
+            line-height: 1.5;
+            transform: scale(0);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-shadow: 
+                0 0 5px #fff,
+                0 0 10px #ffeb3b,
+                0 0 20px #ff9800,
+                0 0 40px #ff5722,
+                0 0 60px #ff0055,
+                3px 3px 6px rgba(0,0,0,0.8);
+            animation: ledNeonPraise 1.2s ease-in-out infinite alternate;
+        }
+        .praise-text.show { transform: scale(1); }
+
+        @keyframes ledNeonPraise {
+            0% {
+                filter: brightness(1) drop-shadow(0 0 10px #ffeb3b);
+            }
+            100% {
+                filter: brightness(1.25) drop-shadow(0 0 25px #00e676);
+                text-shadow: 
+                    0 0 6px #fff,
+                    0 0 14px #69f0ae,
+                    0 0 28px #00e676,
+                    0 0 50px #00b0ff,
+                    3px 3px 8px rgba(0,0,0,0.9);
+            }
+        }
+
+        #retry-btn {
+            display: none;
+            margin-top: 15px;
+            background: #ffeb3b; color: #d32f2f; padding: 10px 28px; font-size: 22px;
+            border-radius: 25px; border: 3px solid #fff; font-family: 'BKoodak', Tahoma, sans-serif;
+            font-weight: bold; cursor: pointer;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+        }
+
+        /* ------------------ صفحه ۳: پایان و گزارش ------------------ */
+        #screen-end {
+            background-image: url('https://s25.uupload.ir/files/arabzade/PasB.jpg');
+            z-index: 5;
+            opacity: 0;
+            pointer-events: none;
+            justify-content: space-between;
+            align-items: center;
+            padding: 35px 20px 45px 20px;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .end-btn-top {
+            width: 170px;
+            max-width: 48%;
+            cursor: pointer;
+            transition: transform 0.25s;
+            filter: drop-shadow(0 5px 12px rgba(0,0,0,0.45));
+            z-index: 10;
+        }
+        .end-btn-top:hover { transform: scale(1.08); }
+
+        /* متن صفحه آخر: دقیقاً وسط صفحه قرار بگیرد و روی کادر بیفتد */
+        .end-message-box {
+            font-family: 'BKoodak', Tahoma, sans-serif;
+            font-size: clamp(21px, 4.8vw, 29px);
+            font-weight: bold;
+            color: #006400;
+            text-align: center;
+            line-height: 1.85;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 10px;
+            max-width: 86%;
+            z-index: 10;
+            text-shadow: 
+                0 0 6px #ffffff,
+                0 0 12px rgba(255, 255, 0, 0.85),
+                0 0 20px #90EE90,
+                0 0 30px #006400;
+            animation: titleLedGlow 1.6s ease-in-out infinite alternate;
+
+            /* تغییر: سنتر دقیق */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes titleLedGlow {
+            0% {
+                color: #006400;
+                text-shadow: 
+                    0 0 6px #ffffff,
+                    0 0 12px rgba(255, 255, 0, 0.75),
+                    0 0 22px #90EE90,
+                    0 0 32px #006400;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                color: #004d00;
+                text-shadow: 
+                    0 0 8px #ffffff,
+                    0 0 16px #ffeb3b,
+                    0 0 28px #76ff03,
+                    0 0 42px #00e676,
+                    0 0 55px #006400;
+                transform: translate(-50%, -50%) scale(1.015);
+            }
+        }
+
+        .end-btn-bottom {
+            width: 175px;
+            max-width: 48%;
+            cursor: pointer;
+            filter: drop-shadow(0 6px 14px rgba(0,0,0,0.45));
+            transition: transform 0.2s, filter 0.2s;
+            animation: none !important;
+            z-index: 10;
+        }
+        .end-btn-bottom:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 8px 18px rgba(0,0,0,0.6));
+        }
+
+        .side-rain-zone {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 16%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 8;
+        }
+        #side-rain-left { left: 0; }
+        #side-rain-right { right: 0; }
+
+        .falling-item {
+            position: absolute;
+            top: -50px;
+            pointer-events: none;
+            font-size: 22px;
+            will-change: transform;
+            animation: fallSide 4.2s linear infinite;
+        }
+
+        @keyframes fallSide {
+            0% {
+                transform: translate3d(0, -30px, 0) rotate(0deg);
+                opacity: 0;
+            }
+            15% {
+                opacity: 0.95;
+            }
+            85% {
+                opacity: 0.9;
+            }
+            100% {
+                transform: translate3d(var(--drift), 105vh, 0) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- موزیک پس‌زمینه ملایم سراسر بازی -->
+    <audio id="bgm-sound" src="https://bkalam.ir/wp-content/uploads/2024/04/Ahang-Bkalam-clip-Kodakane-1.mp3" loop preload="auto"></audio>
+
+    <!-- فایل‌های صوتی اختصاصی طبق درخواست -->
+    <audio id="snd-intro" src="https://s25.uupload.ir/files/arabzade/SR/ramz%20o%20raz.mp3?play" preload="auto"></audio>
+    <audio id="snd-wrong" src="https://s15.uupload.ir/files/arabzade/SR/Eshtebah2.mp3?play" preload="auto"></audio>
+    <audio id="snd-cheer" src="https://s25.uupload.ir/files/arabzade/SR/Tshvigh.mp3?play" preload="auto"></audio>
+    <audio id="snd-end" src="https://s25.uupload.ir/files/arabzade/SR/Payane%20.mp3?play" preload="auto"></audio>
+
+    <!-- افکت صوتی صدای دست زدن -->
+    <audio id="applause-sound" src="https://sedatoseda.com/wp-content/uploads/Applause-Sound-9.mp3" preload="none"></audio>
+
+    <!-- صفحه اول: شروع و مشخصات -->
+    <div id="screen-intro" class="screen">
+        <div id="effects-layer"></div>
+        <div class="text-top">الهی به امید تو</div>
+
+        <!-- حذف لوگوی یاردونه طبق درخواست -->
+
+        <div class="text-title">رمز و راز جدول شگفت‌انگیز</div>
+        
+        <div class="input-wrapper">
+            <div class="input-border-anim"></div>
+            <input type="text" id="playerName" class="name-input" placeholder="🌼🌱 نام زیبای تو..." oninput="updateName()">
+        </div>
+        
+        <div id="readyMessage" class="ready-text">آماده‌ای برای کشف راز جدول؟</div>
+        <img src="https://s17.uupload.ir/files/arabzade/Barg.png" alt="شروع بازی" id="startBtn" class="start-btn" onclick="goToGame()" loading="lazy">
+        
+        <div class="designer-credit">طراح: خانم تقی‌زاده</div>
+    </div>
+
+    <!-- صفحه دوم: محیط بازی تعاملی سودوکو -->
+    <div id="screen-game" class="screen">
+        <div id="game-wrapper">
+            <div id="level-container">مرحله ۱ از ۶</div>
+            <div id="palette-container"></div>
+            <div id="board-container"></div>
+            <div id="lives-container">
+                <span class="heart" id="heart-1">❤️</span>
+                <span class="heart" id="heart-2">❤️</span>
+                <span class="heart" id="heart-3">❤️</span>
+                <span class="heart" id="heart-4">❤️</span>
+                <span class="heart" id="heart-5">❤️</span>
+            </div>
+
+            <!-- لایه بازخورد تشویقی و پایان بازی -->
+            <div id="praise-overlay">
+                <div class="praise-text" id="praise-msg">بسیار عالی و دقیق! ✨</div>
+                <button id="retry-btn" onclick="retryLevel()">تلاش مجدد</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- صفحه سوم: پایان بازی و گزارش -->
+    <div id="screen-end" class="screen">
+        <div id="side-rain-left" class="side-rain-zone"></div>
+        <div id="side-rain-right" class="side-rain-zone"></div>
+
+        <img src="https://s50.uupload.ir/files/arabzade/Dobare2.png" alt="بازی دوباره" class="end-btn-top" onclick="restartEntireGame()" loading="lazy">
+        
+        <div class="end-message-box" id="end-message-text">
+            آفرین قهرمان باهوش و پرتلاش!<br>
+            تو با موفقیت تمام معماها و رمز و رازهای جدول شگفت‌انگیز را کشف کردی.
+        </div>
+
+        <img src="https://s41.uupload.ir/files/arabzade/Ersal.png" alt="ارسال پیام برای معلم" class="end-btn-bottom" onclick="shareResults()" loading="lazy">
+    </div>
+
+    <!-- عنصر شناور Drag & Drop با رندر بهینه -->
+    <div id="drag-ghost"></div>
+
+    <script>
+        function toPersianDigits(n) {
+            const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            return n.toString().replace(/\d/g, x => farsiDigits[x]);
+        }
+
+        const praiseMessages = [
+            "فوق‌العاده بود قهرمان! 🌟",
+            "آفرین به دقت بالایت! ✨",
+            "هوش و پشتکارت عالیه! 👏",
+            "کارت حرف نداشت نابغه! 🎉",
+            "یک معمای دیگر هم فتح شد! 🏆",
+            "شاهکار کردی، درود به تو! 🎈"
+        ];
+
+        let userName = "";
+        let bgmAudio = document.getElementById('bgm-sound');
+        let bgmStarted = false;
+        let introLockTimeout = null;
+
+        function playBGM() {
+            if (!bgmAudio) return;
+            bgmAudio.volume = 0.22;
+            bgmAudio.play().then(() => {
+                bgmStarted = true;
+            }).catch(() => {});
+        }
+
+        ['click', 'touchstart', 'keydown'].forEach(evt => {
+            window.addEventListener(evt, () => {
+                if (!bgmStarted) playBGM();
+            }, { once: true });
+        });
+
+        function playAudioFile(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.currentTime = 0;
+                return el.play().catch(() => {});
+            }
+            return Promise.resolve();
+        }
+
+        function stopAudioFile(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.pause();
+                el.currentTime = 0;
+            }
+        }
+
+        let audioCtx;
+        function initAudio() {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+            } catch (e) {}
+        }
+
+        function playTone(type) {
+            try {
+                if (!audioCtx || audioCtx.state !== 'running') return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                const now = audioCtx.currentTime;
+
+                if (type === 'correct') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(580, now);
+                    osc.frequency.linearRampToValueAtTime(820, now + 0.12);
+                    gain.gain.setValueAtTime(0.3, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                }
+            } catch (e) {}
+        }
+
+        function playApplause() {
+            const sound = document.getElementById('applause-sound');
+            if (sound) {
+                sound.currentTime = 0;
+                sound.volume = 0.45;
+                sound.play().catch(() => {});
+            }
+        }
+
+        function updateName() {
+            const inputVal = document.getElementById('playerName').value.trim();
+            userName = inputVal;
+            const readyMsg = document.getElementById('readyMessage');
+            if (inputVal.length > 0) {
+                readyMsg.innerText = `${inputVal} جان، آماده‌ای برای کشف راز جدول؟`;
+                readyMsg.style.visibility = 'visible';
+            } else {
+                readyMsg.style.visibility = 'hidden';
+            }
+        }
+
+        function switchScreen(fromId, toId) {
+            const fromEl = document.getElementById(fromId);
+            const toEl = document.getElementById(toId);
+            fromEl.style.opacity = '0';
+            fromEl.style.pointerEvents = 'none';
+            setTimeout(() => {
+                toEl.style.opacity = '1';
+                toEl.style.pointerEvents = 'auto';
+            }, 300);
+        }
+
+        function goToGame() {
+            initAudio();
+            playBGM();
+            switchScreen('screen-intro', 'screen-game');
+            lives = 5;
+            updateHearts();
+            currentLevelIndex = 0;
+            loadLevel(currentLevelIndex);
+
+            // قفل بودن جدول در ۱۰ ثانیه ابتدایی ویس شروع
+            isLevelInteractive = false;
+            playAudioFile('snd-intro');
+
+            if (introLockTimeout) clearTimeout(introLockTimeout);
+            introLockTimeout = setTimeout(() => {
+                isLevelInteractive = true;
+            }, 10000);
+        }
+
+        const baseLevels = [
+            { type: 'blob', emptySlots: 1, full: [[1,2,3],[2,3,1],[3,1,2]] },
+            { type: 'blob', emptySlots: 2, full: [[1,3,2],[3,2,1],[2,1,3]] },
+            { type: 'blob', emptySlots: 3, full: [[2,1,3],[3,2,1],[1,3,2]] },
+            { type: 'shape', emptySlots: 2, full: [[1,2,3],[2,3,1],[3,1,2]] },
+            { type: 'shape', emptySlots: 3, full: [[3,1,2],[1,2,3],[2,3,1]] },
+            { type: 'shape', emptySlots: 3, full: [[2,3,1],[1,2,3],[3,1,2]] }
+        ];
+
+        let currentLevelIndex = 0;
+        let activeGrid = [];
+        let lives = 5;
+        let isLevelInteractive = false;
+
+        let draggedValue = null;
+        let draggedType = null;
+        const ghostEl = document.getElementById('drag-ghost');
+
+        function generateLevelGrid(lvlIndex) {
+            const base = baseLevels[lvlIndex];
+            const fullGrid = JSON.parse(JSON.stringify(base.full));
+            const grid = JSON.parse(JSON.stringify(fullGrid));
+            
+            let coords = [];
+            for (let r = 0; r < 3; r++) {
+                for (let c = 0; c < 3; c++) coords.push({r, c});
+            }
+            coords.sort(() => Math.random() - 0.5);
+
+            for (let i = 0; i < base.emptySlots; i++) {
+                const pt = coords[i];
+                grid[pt.r][pt.c] = 0;
+            }
+            return { type: base.type, grid: grid };
+        }
+
+        function loadLevel(index) {
+            const levelData = generateLevelGrid(index);
+            activeGrid = levelData.grid;
+
+            document.getElementById('level-container').innerText = 
+                `مرحله ${toPersianDigits(index + 1)} از ${toPersianDigits(6)}`;
+
+            renderPalette(levelData.type);
+            renderBoard(levelData.type);
+
+            const board = document.getElementById('board-container');
+            board.classList.remove('board-intro-anim');
+            void board.offsetWidth;
+            board.classList.add('board-intro-anim');
+
+            if (index > 0) {
+                isLevelInteractive = true;
+            }
+        }
+
+        function updateHearts() {
+            for (let i = 1; i <= 5; i++) {
+                const heart = document.getElementById(`heart-${i}`);
+                if (i <= lives) heart.classList.remove('lost');
+                else heart.classList.add('lost');
+            }
+        }
+
+        function renderBoard(type) {
+            const board = document.getElementById('board-container');
+            board.innerHTML = '';
+            for (let r = 0; r < 3; r++) {
+                for (let c = 0; c < 3; c++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.dataset.r = r; 
+                    cell.dataset.c = c;
+                    
+                    if (activeGrid[r][c] === 0) {
+                        cell.classList.add('empty');
+                    } else {
+                        const item = document.createElement('div');
+                        item.className = `item ${type}-${activeGrid[r][c]}`;
+                        cell.appendChild(item);
+                    }
+                    board.appendChild(cell);
+                }
+            }
+        }
+
+        function renderPalette(type) {
+            const palette = document.getElementById('palette-container');
+            palette.innerHTML = '';
+            for (let i = 1; i <= 3; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'palette-slot';
+                
+                const item = document.createElement('div');
+                item.className = `item draggable ${type}-${i}`;
+                item.dataset.val = i;
+                
+                item.addEventListener('pointerdown', (e) => handleDragStart(e, i, type));
+                
+                slot.appendChild(item);
+                palette.appendChild(slot);
+            }
+        }
+
+        let isDragging = false;
+
+        function handleDragStart(e, val, type) {
+            if (!isLevelInteractive) return;
+
+            // اگر بازیکن پس از تمام شدن ۱۰ ثانیه بازی را شروع کرد، ویس اول متوقف شود
+            stopAudioFile('snd-intro');
+
+            e.preventDefault();
+            isDragging = true;
+            draggedValue = val;
+            draggedType = type;
+
+            ghostEl.className = `item ${type}-${val}`;
+            ghostEl.style.display = 'block';
+            updateGhostPosition(e.clientX, e.clientY);
+
+            window.addEventListener('pointermove', handleDragMove, { passive: false });
+            window.addEventListener('pointerup', handleDragEnd);
+            window.addEventListener('pointercancel', handleDragEnd);
+        }
+
+        function updateGhostPosition(x, y) {
+            ghostEl.style.transform = `translate3d(${x - 35}px, ${y - 35}px, 0) scale(1.18)`;
+        }
+
+        function handleDragMove(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            updateGhostPosition(e.clientX, e.clientY);
+        }
+
+        function handleDragEnd(e) {
+            if (!isDragging) return;
+            isDragging = false;
+            window.removeEventListener('pointermove', handleDragMove);
+            window.removeEventListener('pointerup', handleDragEnd);
+            window.removeEventListener('pointercancel', handleDragEnd);
+
+            ghostEl.style.display = 'none';
+
+            const clientX = e.clientX;
+            const clientY = e.clientY;
+
+            const dropTarget = document.elementFromPoint(clientX, clientY);
+            const cell = dropTarget ? dropTarget.closest('.cell.empty') : null;
+
+            if (cell) {
+                const r = parseInt(cell.dataset.r);
+                const c = parseInt(cell.dataset.c);
+                processDrop(r, c, cell);
+            }
+            draggedValue = null;
+        }
+
+        function isValidMove(r, c, val) {
+            for (let i = 0; i < 3; i++) if (activeGrid[r][i] === val) return false;
+            for (let i = 0; i < 3; i++) if (activeGrid[i][c] === val) return false;
+            return true;
+        }
+
+        function processDrop(r, c, cellElement) {
+            if (isValidMove(r, c, draggedValue)) {
+                playTone('correct');
+                activeGrid[r][c] = draggedValue;
+                
+                cellElement.classList.remove('empty');
+                cellElement.classList.add('blink-green');
+                
+                const item = document.createElement('div');
+                item.className = `item ${draggedType}-${draggedValue}`;
+                cellElement.appendChild(item);
+                
+                createStars(cellElement);
+                checkLevelComplete();
+            } else {
+                // ویس اشتباه
+                playAudioFile('snd-wrong');
+
+                cellElement.classList.remove('blink-red', 'shake');
+                void cellElement.offsetWidth;
+                cellElement.classList.add('blink-red', 'shake');
+                
+                lives--;
+                updateHearts();
+                if (lives <= 0) {
+                    isLevelInteractive = false;
+                    setTimeout(showGameOver, 450);
+                }
+            }
+        }
+
+        function createStars(element) {
+            const rect = element.getBoundingClientRect();
+            const wrapperRect = document.getElementById('game-wrapper').getBoundingClientRect();
+            
+            for (let i = 0; i < 6; i++) {
+                const star = document.createElement('div');
+                star.className = 'star-particle';
+                star.innerText = '⭐';
+                star.style.left = (rect.left - wrapperRect.left + rect.width / 2 - 12) + 'px';
+                star.style.top = (rect.top - wrapperRect.top + rect.height / 2 - 12) + 'px';
+                
+                const tx = (Math.random() - 0.5) * 110 + 'px';
+                const ty = (Math.random() - 0.5) * 110 + 'px';
+                star.style.setProperty('--tx', tx);
+                star.style.setProperty('--ty', ty);
+                
+                document.getElementById('game-wrapper').appendChild(star);
+                setTimeout(() => star.remove(), 800);
+            }
+        }
+
+        function checkLevelComplete() {
+            let isComplete = true;
+            for (let r = 0; r < 3; r++) {
+                for (let c = 0; c < 3; c++) {
+                    if (activeGrid[r][c] === 0) isComplete = false;
+                }
+            }
+            if (isComplete) {
+                isLevelInteractive = false;
+                setTimeout(() => {
+                    playApplause();
+                    fireConfetti();
+                    showPraiseAndAdvance();
+                }, 350);
+            }
+        }
+
+        // نمایش تشویق و عدم جابجایی تا اتمام قطعی ویس تشویق
+        function showPraiseAndAdvance() {
+            const overlay = document.getElementById('praise-overlay');
+            const msg = document.getElementById('praise-msg');
+            const retryBtn = document.getElementById('retry-btn');
+            retryBtn.style.display = 'none';
+
+            msg.innerText = praiseMessages[currentLevelIndex % praiseMessages.length];
+            overlay.style.display = 'flex';
+            setTimeout(() => msg.classList.add('show'), 40);
+
+            const cheerAudio = document.getElementById('snd-cheer');
+            cheerAudio.currentTime = 0;
+            cheerAudio.play().catch(() => {});
+
+            let hasMoved = false;
+
+            const onCheerEnded = () => {
+                if (hasMoved) return;
+                hasMoved = true;
+                cheerAudio.removeEventListener('ended', onCheerEnded);
+                proceedToNextStep();
+            };
+
+            cheerAudio.addEventListener('ended', onCheerEnded, { once: true });
+
+            setTimeout(() => {
+                if (!hasMoved) {
+                    hasMoved = true;
+                    cheerAudio.removeEventListener('ended', onCheerEnded);
+                    proceedToNextStep();
+                }
+            }, 5500);
+
+            function proceedToNextStep() {
+                msg.classList.remove('show');
+                overlay.style.display = 'none';
+
+                if (currentLevelIndex < 5) {
+                    currentLevelIndex++;
+                    loadLevel(currentLevelIndex);
+                } else {
+                    switchScreen('screen-game', 'screen-end');
+                    initEndScreenEffects();
+                    playAudioFile('snd-end');
+                }
+            }
+        }
+
+        function showGameOver() {
+            const overlay = document.getElementById('praise-overlay');
+            const msg = document.getElementById('praise-msg');
+            const retryBtn = document.getElementById('retry-btn');
+
+            overlay.style.display = 'flex';
+            msg.innerText = "دوباره تلاش کن، حتماً می‌تونی! 💪";
+            retryBtn.style.display = 'block';
+            setTimeout(() => msg.classList.add('show'), 50);
+        }
+
+        // شروع مجدد بازی از مرحله اول پس از اتمام قلب‌ها بدون پخش مجدد صوت ابتدای بازی
+        function retryLevel() {
+            const overlay = document.getElementById('praise-overlay');
+            const msg = document.getElementById('praise-msg');
+            msg.classList.remove('show');
+            overlay.style.display = 'none';
+
+            if (introLockTimeout) clearTimeout(introLockTimeout);
+            stopAudioFile('snd-intro');
+
+            lives = 5;
+            updateHearts();
+            currentLevelIndex = 0;
+            loadLevel(currentLevelIndex);
+            isLevelInteractive = true;
+        }
+
+        function restartEntireGame() {
+            stopAudioFile('snd-end');
+            if (introLockTimeout) clearTimeout(introLockTimeout);
+            stopAudioFile('snd-intro');
+
+            switchScreen('screen-end', 'screen-game');
+            lives = 5;
+            updateHearts();
+            currentLevelIndex = 0;
+            loadLevel(currentLevelIndex);
+            isLevelInteractive = true;
+        }
+
+        let sideRainInterval = null;
+        function initEndScreenEffects() {
+            const leftZone = document.getElementById('side-rain-left');
+            const rightZone = document.getElementById('side-rain-right');
+            leftZone.innerHTML = '';
+            rightZone.innerHTML = '';
+
+            if (sideRainInterval) clearInterval(sideRainInterval);
+
+            // بارش فقط شامل ستاره ⭐ و برگ 🍃 طبق درخواست
+            const items = ['⭐', '🍃'];
+
+            function spawnDrop(zone) {
+                const drop = document.createElement('div');
+                drop.className = 'falling-item';
+                drop.innerText = items[Math.floor(Math.random() * items.length)];
+                drop.style.left = Math.random() * 80 + '%';
+                
+                const drift = (Math.random() - 0.5) * 40 + 'px';
+                drop.style.setProperty('--drift', drift);
+
+                const dur = Math.random() * 2 + 3.2;
+                drop.style.animationDuration = dur + 's';
+                drop.style.fontSize = (Math.random() * 10 + 20) + 'px';
+
+                zone.appendChild(drop);
+                setTimeout(() => drop.remove(), dur * 1000);
+            }
+
+            sideRainInterval = setInterval(() => {
+                spawnDrop(leftZone);
+                spawnDrop(rightZone);
+            }, 380);
+        }
+
+        function fireConfetti() {
+            const colors = ['#f44336', '#e91e63', '#9c27b0', '#03a9f4', '#4caf50', '#ffeb3b', '#ff9800'];
+            for (let i = 0; i < 55; i++) {
+                const conf = document.createElement('div');
+                conf.className = 'confetti';
+                conf.style.left = Math.random() * 100 + '%';
+                conf.style.top = '-10px';
+                conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                const fallDuration = Math.random() * 2 + 2.2;
+                const tx = (Math.random() - 0.5) * 80 + 'vw';
+                
+                conf.animate([
+                    { transform: 'translate3d(0,0,0) rotate(0)', opacity: 1 },
+                    { transform: `translate3d(${tx}, 110vh, 0) rotate(${Math.random() * 720}deg)`, opacity: 0 }
+                ], {
+                    duration: fallDuration * 1000,
+                    easing: 'cubic-bezier(.37,0,.63,1)',
+                    fill: 'forwards'
+                });
+
+                document.getElementById('game-wrapper').appendChild(conf);
+                setTimeout(() => conf.remove(), fallDuration * 1000);
+            }
+        }
+
+        function shareResults() {
+            const remainingHeartsPersian = toPersianDigits(lives);
+            let namePart = userName ? `من ${userName} هستم و ` : "من ";
+            
+            const message = `سلام معلم خوبم ❤\n${namePart}توانستم با ${remainingHeartsPersian} قلب، رمز و راز جدول‌های شگفت انگیز را پیدا کنم.`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'کارنامه بازی رمز و راز جدول',
+                    text: message
+                }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(message).then(() => {
+                    alert("متن کارنامه کپی شد! می‌توانید در شاد یا پیام‌رسان‌ها برای معلم بفرستید:\n\n" + message);
+                }).catch(() => {
+                    alert(message);
+                });
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const effectsLayer = document.getElementById('effects-layer');
+            if (effectsLayer) {
+                for (let i = 0; i < 20; i++) {
+                    let firefly = document.createElement('div');
+                    firefly.className = 'firefly';
+                    firefly.style.left = Math.random() * 100 + 'vw';
+                    firefly.style.top = Math.random() * 100 + 'vh';
+                    firefly.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
+                    firefly.style.animationDelay = (Math.random() * 2) + 's';
+                    effectsLayer.appendChild(firefly);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
